@@ -2,6 +2,15 @@
 
 An HTTP service that renders webpages with a shared Chromium instance and returns either Markdown or screenshots split into vertical frames.
 
+## Disclaimer
+
+Intended for **local use only**; do not expose it to untrusted networks:
+
+- **No SSRF protections**: URLs are fetched without restrictions, so callers can reach internal/localhost services and cloud metadata endpoints.
+- **Lax resource limiting**: Viewport, frame, and image dimensions are only loosely bounded; requests can consume significant memory, CPU, and disk.
+- **No authentication or rate limiting**: Any process that can reach the socket can drive the browser.
+- **Arbitrary page content**: Chromium executes fetched pages; treat it as untrusted and sandbox it (container, dedicated user, network policy).
+
 ## Endpoints
 
 All routes are nested under `/v1`. Requests are limited by a semaphore (503 when busy) and a global timeout.
